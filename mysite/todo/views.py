@@ -6,19 +6,20 @@ from django.contrib import messages
 # Create your views here.
 def home(request):
     if request.method == 'POST':
-        form=ListForm(request.POST or None)
+        form=ListForm(request.POST)
 
         if form.is_valid():
             form.save()
             all_items=List.objects.all
             messages.success(request,'home.html',{'all_items':all_items})
+            return redirect('home')
 
     else:
         all_items=List.objects.all
-        return render(request,"home.html",{'all_items': all_items})
+        return render(request,'home.html',{'all_items': all_items})
 
 def delete(request,list_id):
-    item=Lost.objects.get(pk=list_id)
+    item=List.objects.get(pk=list_id)
     item.delete()
     messages.success(request, ('항목이 삭제 되었습니다.'))
     return redirect('home')
